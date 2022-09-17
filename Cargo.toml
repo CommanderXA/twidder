@@ -3,10 +3,10 @@ name = "actix_test"
 version = "0.1.0"
 edition = "2021"
 authors = ["commanderxa <art.ostrikov@gmail.com>"]
-readme = "readme.md"
 publish = false
+readme = "README.md"
 license = "MPL-2.0"
-license-file = "license.txt"
+license-file = "LICNESE.txt"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -17,6 +17,7 @@ rustls-pemfile = "1.0.1"
 serde = "1.0.144"
 chrono = "0.4.22"
 uuid = "1.1.2"
+dotenv = "0.15.0"
 
 [dependencies.sea-orm]
 version = "0.9.2"

@@ -1,5 +1,9 @@
 # Rust generated
 /target
+Cargo.lock
 
-# Certificates
+# Sensitive
+.env
+.idea
+.vscode
 /certs
