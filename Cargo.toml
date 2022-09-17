@@ -1,8 +1,8 @@
 [package]
 name = "actix_test"
 version = "0.1.0"
-edition = "2021"¨
-authors = ["commanderxa" <art.ostrikov@gmail.com>]
+edition = "2021"
+authors = ["commanderxa <art.ostrikov@gmail.com>"]
 readme = "readme.md"
 publish = false
 license = "MPL-2.0"
