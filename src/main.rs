@@ -8,6 +8,7 @@ use std::env;
 
 use actix_web::{middleware::Logger, App, HttpServer};
 use dotenv::dotenv;
+use migration::{Migrator, MigratorTrait};
 
 use crate::tls::load_tls;
 
@@ -15,10 +16,13 @@ use crate::tls::load_tls;
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
 
-    // DB
-    db::db_init()
+    // DataBase
+    let conn = db::db_init()
         .await
         .expect("Got error while connecting to the DB");
+    Migrator::up(&conn, None)
+        .await
+        .expect("Error occured during migrations");
     db::db_fill().await?;
 
     // TLS

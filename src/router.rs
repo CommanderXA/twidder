@@ -36,3 +36,18 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             ),
     );
 }
+
+/* 
+    Routes:
+
+    /api/
+        - users
+            - /
+            - /{id}
+
+        - posts/
+            - /
+            - /{id}
+
+        - settings/
+*/

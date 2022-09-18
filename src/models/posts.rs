@@ -43,6 +43,7 @@ impl Media {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Serialize)]
 pub enum MediaType {
     Picture,
