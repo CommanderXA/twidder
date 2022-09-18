@@ -1,4 +1,4 @@
-use actix_web::{get, web, Responder, Result, patch};
+use actix_web::{get, patch, web, Responder, Result};
 use uuid::Uuid;
 
 use crate::models::settings::{self, Language, Notifications, Settings};
@@ -24,4 +24,3 @@ pub async fn edit_settings() -> Result<impl Responder> {
     );
     Ok(web::Json(obj))
 }
-

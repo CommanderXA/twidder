@@ -1,9 +1,10 @@
 use std::{
+    env,
     fs::{self},
-    io::BufReader, env,
+    io::BufReader,
 };
 
-use tokio_rustls::rustls::{ServerConfig, self};
+use tokio_rustls::rustls::{self, ServerConfig};
 
 fn load_certs(filename: &str) -> Vec<rustls::Certificate> {
     let certfile = fs::File::open(filename).expect("cannot open certificate file");
@@ -38,7 +39,7 @@ fn load_private_key(filename: &str) -> rustls::PrivateKey {
 pub fn load_tls() -> ServerConfig {
     let tls_cert = env::var("TLS_CERT").expect("`TLS_CERT` must be set in the `.env` file!");
     let tls_key = env::var("TLS_KEY").expect("`TLS_KEY` must be set in the `.env` file!");
-    
+
     let cert = load_certs(&format!("./certs/{tls_cert}.pem"));
     let key = load_private_key(&format!("./certs/{tls_key}.pem"));
 
