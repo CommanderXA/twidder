@@ -31,12 +31,12 @@ pub async fn post() -> Result<impl Responder> {
     Ok(web::Json(obj))
 }
 
-#[patch("/edit")]
+#[patch("")]
 pub async fn edit_post() -> Result<impl Responder> {
     Ok(web::Json(200))
 }
 
-#[delete("/delete")]
+#[delete("")]
 pub async fn delete_post() -> Result<impl Responder> {
     Ok(web::Json(200))
 }

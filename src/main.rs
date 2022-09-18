@@ -5,12 +5,16 @@ mod tls;
 
 use std::env;
 
-use actix_web::{App, HttpServer};
+use actix_web::{middleware::Logger, App, HttpServer};
 use dotenv::dotenv;
+
+use crate::tls::load_tls;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
+
+    let tls_config = load_tls();
 
     // Server Setup
     let host = env::var("HOST").expect("`HOST` must be set in the `.env` file!");
@@ -19,11 +23,14 @@ async fn main() -> std::io::Result<()> {
         .parse::<u16>()
         .expect("`PORT` must be a postitve number");
 
-    println!("Server runs at `http://{host}:{port}`\nPress `ctrl + c` to stop.");
+    println!("Server runs at `https://{host}:{port}`\nPress `ctrl + c` to stop.");
 
-    HttpServer::new(|| App::new().configure(router::config))
-        .bind((host, port))?
-        .workers(5) // Many threads
-        .run()
-        .await
+    HttpServer::new(move || {
+        let logger = Logger::default();
+        App::new().wrap(logger).configure(router::config)
+    })
+    .bind_rustls((host, port), tls_config)?
+    .workers(5) // Many threads
+    .run()
+    .await
 }

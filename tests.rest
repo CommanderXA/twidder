@@ -1,0 +1,19 @@
+###     =========      ###
+###     API Tests      ###
+###     =========      ###
+
+
+//     USERS    //
+
+PATCH http://localhost:8080/api/users/1gdgdfg
+
+###
+DELETE http://localhost:8080/api/users/1gdgdfg
+
+
+//     POSTS    //
+
+
+
+//     SETTINGS     //
+

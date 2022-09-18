@@ -1,4 +1,4 @@
-use actix_web::{delete, get, patch, web, Responder, Result};
+use actix_web::{delete, get, patch, web, HttpRequest, Responder, Result};
 
 use crate::models::user::User;
 
@@ -13,21 +13,24 @@ pub async fn index() -> Result<impl Responder> {
 }
 
 #[get("")]
-pub async fn user() -> Result<impl Responder> {
+pub async fn user(req: HttpRequest) -> Result<impl Responder> {
+    let user_id: String = req.match_info().get("id").unwrap().parse().unwrap();
     let obj = User::new(
-        "username".to_owned(),
+        "username, id: ".to_owned() + &user_id,
         "first_name".to_owned(),
         "last_name".to_owned(),
     );
     Ok(web::Json(obj))
 }
 
-#[patch("/edit")]
-pub async fn edit_user() -> Result<impl Responder> {
-    Ok(web::Json(1))
+#[patch("")]
+pub async fn edit_user(req: HttpRequest) -> Result<impl Responder> {
+    let user_id: String = req.match_info().get("id").unwrap().parse().unwrap();
+    Ok(web::Json(user_id))
 }
 
-#[delete("/delete")]
-pub async fn delete_user() -> Result<impl Responder> {
-    Ok(web::Json(1))
+#[delete("")]
+pub async fn delete_user(req: HttpRequest) -> Result<impl Responder> {
+    let user_id: String = req.match_info().get("id").unwrap().parse().unwrap();
+    Ok(web::Json(user_id))
 }
