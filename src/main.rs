@@ -15,6 +15,8 @@ use crate::tls::load_tls;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
+    // std::env::set_var("RUST_LOG", "debug");
+    std::env::set_var("RUST_BACKTRACE", "1");
 
     // DataBase
     let conn = db::db_init()

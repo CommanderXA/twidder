@@ -14,12 +14,15 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/api")
             .service(
-                web::scope("/users").service(users::index).service(
-                    web::scope("/{id}")
-                        .service(users::user)
-                        .service(users::edit_user)
-                        .service(users::delete_user),
-                ),
+                web::scope("/users")
+                    .service(users::index)
+                    .service(users::create_user)
+                    .service(
+                        web::scope("/{id}")
+                            .service(users::user)
+                            .service(users::edit_user)
+                            .service(users::delete_user),
+                    ),
             )
             .service(
                 web::scope("/posts").service(posts::index).service(
@@ -37,7 +40,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     );
 }
 
-/* 
+/*
     Routes:
 
     /api/

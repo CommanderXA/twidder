@@ -1,12 +1,13 @@
-# Rust generated
+# Rust related
 /target
 Cargo.lock
+/migration/target
+/migration/Cargo.lock
 
 # Sensitive
 .env
-.idea
-.vscode
 /certs
 
-/migration/target
-/migration/Cargo.lock
+# IDEs
+.idea
+.vscode

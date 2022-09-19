@@ -5,18 +5,44 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
 #[sea_orm(table_name = "post")]
 pub struct Model {
-    #[sea_orm(primary_key)]
-    pub id: i32,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub id: Uuid,
     pub title: String,
     pub text: String,
+    pub media: Option<Uuid>,
+    pub user: Option<Uuid>,
+    pub created_at: DateTime,
 }
 
-#[derive(Copy, Clone, Debug, EnumIter)]
-pub enum Relation {}
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+pub enum Relation {
+    #[sea_orm(
+        belongs_to = "super::media::Entity",
+        from = "Column::Media",
+        to = "super::media::Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    Media,
+    #[sea_orm(
+        belongs_to = "super::user::Entity",
+        from = "Column::User",
+        to = "super::user::Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    User,
+}
 
-impl RelationTrait for Relation {
-    fn def(&self) -> RelationDef {
-        panic!("No RelationDef")
+impl Related<super::media::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Media.def()
+    }
+}
+
+impl Related<super::user::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::User.def()
     }
 }
 
