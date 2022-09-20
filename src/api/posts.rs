@@ -1,9 +1,16 @@
-use actix_web::{delete, get, patch, web, Responder, Result};
+use actix_web::{
+    delete, get, http::header::ContentType, patch, post, web, HttpResponse, Responder, Result,
+};
 use chrono::Utc;
 
-use crate::models::posts::{self, Media};
+use entity::post as Post;
 
-#[get("/")]
+use crate::{
+    models::posts::{self, Media},
+    AppState,
+};
+
+#[get("")]
 pub async fn index() -> Result<impl Responder> {
     let obj = posts::Post::new(
         "Test".to_owned(),
@@ -15,6 +22,19 @@ pub async fn index() -> Result<impl Responder> {
         Utc::now(),
     );
     Ok(web::Json(obj))
+}
+
+#[post("")]
+pub async fn create_post(
+    state: web::Data<AppState>,
+    request: web::Json<Post::Model>,
+) -> HttpResponse {
+    let conn = &state.db_conn;
+    let form = request.into_inner();
+
+    HttpResponse::Ok()
+        .content_type(ContentType::json())
+        .body(format!("Title: {:?},\nText: {:?}", form.title, form.text))
 }
 
 #[get("")]

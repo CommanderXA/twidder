@@ -1,10 +1,6 @@
 use actix_web::web;
 
-use crate::api::{
-    posts::{self, delete_post, edit_post, post},
-    settings::{self, edit_settings},
-    users,
-};
+use crate::api::{auth, posts, settings, users};
 
 /*
     Config of the Router.
@@ -14,28 +10,34 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/api")
             .service(
-                web::scope("/users")
-                    .service(users::index)
-                    .service(users::create_user)
-                    .service(
-                        web::scope("/{id}")
-                            .service(users::user)
-                            .service(users::edit_user)
-                            .service(users::delete_user),
-                    ),
+                web::scope("/auth")
+                    .service(auth::login)
+                    .service(auth::register),
             )
             .service(
-                web::scope("/posts").service(posts::index).service(
+                web::scope("/users").service(users::index).service(
                     web::scope("/{id}")
-                        .service(post)
-                        .service(edit_post)
-                        .service(delete_post),
+                        .service(users::get_user)
+                        .service(users::edit_user)
+                        .service(users::delete_user),
                 ),
+            )
+            .service(
+                web::scope("/posts")
+                    .service(posts::index)
+                    .service(posts::create_post)
+                    .service(
+                        web::scope("/{id}")
+                            .service(posts::post)
+                            .service(posts::edit_post)
+                            .service(posts::delete_post),
+                    ),
             )
             .service(
                 web::scope("/settings")
                     .service(settings::index)
-                    .service(edit_settings),
+                    .service(settings::create_settings)
+                    .service(settings::edit_settings),
             ),
     );
 }
@@ -44,12 +46,16 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     Routes:
 
     /api/
+        - auth
+            - /login
+            - /register
+
         - users
-            - /
+            - 
             - /{id}
 
         - posts/
-            - /
+            - 
             - /{id}
 
         - settings/

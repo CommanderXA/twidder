@@ -5,15 +5,51 @@
 
 //     USERS    //
 
-PATCH http://localhost:8080/api/users/1gdgdfg
+###
+GET https://{{$dotenv HOST}}:{{$dotenv PORT}}/api/users/
 
 ###
-DELETE http://localhost:8080/api/users/1gdgdfg
+GET https://0.0.0.0:8080/api/users/ HTTP/1.1
+
+###
+GET https://0.0.0.0:8080/api/users/123 HTTP/1.1
+
+###
+PATCH https://{{$dotenv HOST}}:{{$dotenv PORT}}/api/users/1gdgdfg
+
+###
+DELETE https://{{$dotenv HOST}}:{{$dotenv PORT}}/api/users/1gdgdfg
+
+###
+POST https://{{$dotenv HOST}}:{{$dotenv PORT}}/api/users HTTP/1.1
+Content-Type: "application/json"
+
+{
+    "username": "commander",
+    "email": "commander@mail.com",
+    "first_name": "Commander",
+    "last_name": "Commander",
+}
 
 
 //     POSTS    //
 
+###
+POST https://{{$dotenv HOST}}:{{$dotenv PORT}}/api/posts HTTP/1.1
+Content-Type: "application/json"
+
+{
+    "title": "commander",
+    "text": "commander@mail.com",
+}
 
 
 //     SETTINGS     //
 
+###
+POST https://{{$dotenv HOST}}:{{$dotenv PORT}}/api/settings/ HTTP/1.1
+Content-Type: "application/json"
+
+{
+ 
+}

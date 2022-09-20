@@ -1,40 +1,45 @@
-use actix_web::{delete, get, patch, post, web, HttpRequest, Responder, Result};
+use std::str::FromStr;
 
-use crate::models::user::User;
+use actix_web::{
+    delete, get, http::header::ContentType, patch, web, HttpRequest, HttpResponse, Responder,
+    Result,
+};
 
-#[get("/")]
-pub async fn index() -> Result<impl Responder> {
-    let obj = User::new(
-        "username".to_owned(),
-        "".to_owned(),
-        "first_name".to_owned(),
-        "last_name".to_owned(),
-    );
-    Ok(web::Json(obj))
-}
+use entity::user;
+use entity::user::Entity as User;
+use migration::sea_orm::EntityTrait;
+use serde::{Deserialize, Serialize};
 
-#[post("/")]
-pub async fn create_user() -> Result<impl Responder> {
-    // let user = user::ActiveModel {
-    //     username: "username".to_owned(),
-    //     email: "".to_owned(),
-    //     first_name: "first_name".to_owned(),
-    //     last_name: "last_name".to_owned(),
-    // };
+use crate::AppState;
 
-    Ok(web::Json(200))
+#[derive(Serialize, Deserialize)]
+pub struct UserPath {
+    id: String,
 }
 
 #[get("")]
-pub async fn user(req: HttpRequest) -> Result<impl Responder> {
-    let user_id: String = req.match_info().get("id").unwrap().parse().unwrap();
-    let obj = User::new(
-        "username, id: ".to_owned() + &user_id,
-        "".to_owned(),
-        "first_name".to_owned(),
-        "last_name".to_owned(),
-    );
-    Ok(web::Json(obj))
+pub async fn index() -> Result<impl Responder> {
+    Ok(web::Json(2))
+}
+
+#[get("")]
+pub async fn get_user(state: web::Data<AppState>, path: web::Path<UserPath>) -> HttpResponse {
+    let conn = &state.db_conn;
+    let id: String = path.into_inner().id;
+
+    let user: Option<user::Model> = User::find_by_id(uuid::Uuid::from_str(&id).unwrap())
+        .one(conn)
+        .await
+        .unwrap();
+
+    match user {
+        Some(user) => HttpResponse::Ok()
+            .content_type(ContentType::json())
+            .body(serde_json::to_string(&user).unwrap()),
+        _ => HttpResponse::NotFound()
+            .content_type(ContentType::json())
+            .body("User not found"),
+    }
 }
 
 #[patch("")]
